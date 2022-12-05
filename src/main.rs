@@ -1,5 +1,20 @@
 use wasm_bindgen::prelude::*;
 
+macro_rules! clone {
+    ($($n:ident),+; || $body:block) => (
+        {
+            $( let $n = $n.clone(); )+
+            move || { $body }
+        }
+    );
+    ($($n:ident),+; |$($p:ident),+| $body:block) => (
+        {
+            $( let $n = $n.clone(); )+
+            move |$($p),+| { $body }
+        }
+    );
+}
+
 mod dom {
 
     use wasm_bindgen::JsCast;
@@ -67,13 +82,12 @@ pub fn main() -> Result<(), JsValue> {
     let input = document.create_element("input");
 
     p.set_inner_html("Hello from Rust!");
-    let p2 = p.clone();
-    let input2 = input.clone();
-    let c = move || {
-        let value = input2.get_value();
-        p2.set_inner_html(&value)
-    };
-    p.add_event_listener("click", c);
+    p.add_event_listener(
+        "click",
+        clone!(p,input; || {
+            p.set_inner_html(&input.get_value())
+        }),
+    );
 
     body.append_child(&input);
     body.append_child(&p);
