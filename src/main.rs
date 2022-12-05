@@ -77,7 +77,7 @@ mod dom {
 
 pub fn main() -> Result<(), JsValue> {
     let document = dom::document();
-    let body = document.body();
+
     let p = document.create_element("p");
     let input = document.create_element("input");
 
@@ -89,6 +89,7 @@ pub fn main() -> Result<(), JsValue> {
         }),
     );
 
+    let body = document.body();
     body.append_child(&input);
     body.append_child(&p);
     Ok(())
