@@ -35,7 +35,10 @@ mod dom {
             self.element.append_child(&element.element).unwrap();
         }
 
-        pub fn add_event_listener(&self, handler: &'static dyn Fn()) {
+        pub fn add_event_listener<F>(&self, handler: F)
+        where
+            F: Fn() + 'static,
+        {
             let closure = wasm_bindgen::closure::Closure::<dyn Fn()>::new(handler);
             self.element
                 .add_event_listener_with_callback("click", closure.as_ref().unchecked_ref())
@@ -44,6 +47,7 @@ mod dom {
         }
     }
 
+    #[derive(Clone)]
     pub struct Element {
         element: web_sys::Element,
     }
@@ -55,11 +59,8 @@ pub fn main() -> Result<(), JsValue> {
     let p = document.create_element("p");
 
     p.set_inner_html("Hello from Rust!");
-    p.add_event_listener(&move || {
-        let document = web_sys::window().unwrap().document().unwrap();
-        let val = document.query_selector("p").unwrap().unwrap();
-        val.set_inner_html("Clicked")
-    });
+    let p2 = p.clone();
+    p.add_event_listener(move || p2.set_inner_html("foo"));
 
     body.append_child(&p);
     Ok(())
