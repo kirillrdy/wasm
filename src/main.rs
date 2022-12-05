@@ -69,10 +69,11 @@ pub fn main() -> Result<(), JsValue> {
     p.set_inner_html("Hello from Rust!");
     let p2 = p.clone();
     let input2 = input.clone();
-    p.add_event_listener("click", move || {
+    let c = move || {
         let value = input2.get_value();
         p2.set_inner_html(&value)
-    });
+    };
+    p.add_event_listener("click", c);
 
     body.append_child(&input);
     body.append_child(&p);
