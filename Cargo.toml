@@ -3,8 +3,6 @@ name = "trying-wasm"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-wasm-bindgen = "0.2.81"
-web-sys = { version = "0.3.58", features = ["Window", "HtmlDocument", "HtmlElement", "HtmlInputElement"] }
+wasm-bindgen = "*"
+web-sys = { version = "*", features = ["Window", "HtmlDocument", "HtmlElement", "HtmlInputElement"] }
