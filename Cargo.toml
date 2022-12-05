@@ -7,4 +7,4 @@ edition = "2021"
 
 [dependencies]
 wasm-bindgen = "0.2.81"
-web-sys = { version = "0.3.58", features = ["Window", "HtmlDocument", "HtmlElement"] }
+web-sys = { version = "0.3.58", features = ["Window", "HtmlDocument", "HtmlElement", "HtmlInputElement"] }

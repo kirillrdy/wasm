@@ -15,7 +15,7 @@ mod dom {
     }
 
     impl Document {
-        pub fn create_element(self, tag: &str) -> Element {
+        pub fn create_element(&self, tag: &str) -> Element {
             let element = self.document.create_element(tag).unwrap();
             Element { element }
         }
@@ -34,14 +34,21 @@ mod dom {
         pub fn append_child(&self, element: &Element) {
             self.element.append_child(&element.element).unwrap();
         }
+        pub fn get_value(&self) -> String {
+            self.element
+                .clone()
+                .dyn_into::<web_sys::HtmlInputElement>()
+                .unwrap()
+                .value()
+        }
 
-        pub fn add_event_listener<F>(&self, handler: F)
+        pub fn add_event_listener<Handler>(&self, event_type: &str, handler: Handler)
         where
-            F: Fn() + 'static,
+            Handler: Fn() + 'static,
         {
             let closure = wasm_bindgen::closure::Closure::<dyn Fn()>::new(handler);
             self.element
-                .add_event_listener_with_callback("click", closure.as_ref().unchecked_ref())
+                .add_event_listener_with_callback(event_type, closure.as_ref().unchecked_ref())
                 .unwrap();
             closure.forget();
         }
@@ -57,11 +64,17 @@ pub fn main() -> Result<(), JsValue> {
     let document = dom::document();
     let body = document.body();
     let p = document.create_element("p");
+    let input = document.create_element("input");
 
     p.set_inner_html("Hello from Rust!");
     let p2 = p.clone();
-    p.add_event_listener(move || p2.set_inner_html("foo"));
+    let input2 = input.clone();
+    p.add_event_listener("click", move || {
+        let value = input2.get_value();
+        p2.set_inner_html(&value)
+    });
 
+    body.append_child(&input);
     body.append_child(&p);
     Ok(())
 }
