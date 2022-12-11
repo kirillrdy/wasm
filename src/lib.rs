@@ -15,7 +15,7 @@ macro_rules! clone {
     );
 }
 
-mod dom {
+pub mod dom {
 
     use wasm_bindgen::JsCast;
 
@@ -34,7 +34,10 @@ mod dom {
             let element = self.document.create_element(tag).unwrap();
             Element { element }
         }
-
+        pub fn create_element_ns(&self, ns: &str, tag: &str) -> Element {
+            let element = self.document.create_element_ns(Some(ns), tag).unwrap();
+            Element { element }
+        }
         pub fn body(&self) -> Element {
             let element = self.document.body().unwrap();
             let element = element.dyn_into::<web_sys::Element>().unwrap();
@@ -49,6 +52,10 @@ mod dom {
         pub fn append_child(&self, element: &Element) {
             self.element.append_child(&element.element).unwrap();
         }
+        pub fn set_attribute(&self, name: &str, value: &str) {
+            self.element.set_attribute(name, value).unwrap();
+        }
+
         pub fn get_value(&self) -> String {
             self.element
                 .clone()
@@ -71,7 +78,7 @@ mod dom {
 
     #[derive(Clone)]
     pub struct Element {
-        element: web_sys::Element,
+        pub element: web_sys::Element,
     }
 }
 
