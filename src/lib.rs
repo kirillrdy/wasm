@@ -1,4 +1,5 @@
 use wasm_bindgen::prelude::*;
+#[macro_export]
 
 macro_rules! clone {
     ($($n:ident),+; || $body:block) => (
