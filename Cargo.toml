@@ -1,8 +1,8 @@
 [package]
-name = "trying-wasm"
+name = "wasm"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-wasm-bindgen = "*"
-web-sys = { version = "*", features = ["MouseEvent", "Window", "HtmlDocument", "HtmlElement", "HtmlInputElement"] }
+wasm-bindgen = "^0.2.83"
+web-sys = { version = "^0.3.60", features = ["MouseEvent", "Window", "HtmlDocument", "HtmlElement", "HtmlInputElement"] }
