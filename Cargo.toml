@@ -5,4 +5,4 @@ edition = "2021"
 
 [dependencies]
 wasm-bindgen = "*"
-web-sys = { version = "*", features = ["Window", "HtmlDocument", "HtmlElement", "HtmlInputElement"] }
+web-sys = { version = "*", features = ["MouseEvent", "Window", "HtmlDocument", "HtmlElement", "HtmlInputElement"] }
