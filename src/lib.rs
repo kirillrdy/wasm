@@ -67,9 +67,9 @@ pub mod dom {
 
         pub fn add_event_listener<Handler>(&self, event_type: &str, handler: Handler)
         where
-            Handler: Fn() + 'static,
+            Handler: Fn(web_sys::MouseEvent) + 'static,
         {
-            let closure = wasm_bindgen::closure::Closure::<dyn Fn()>::new(handler);
+            let closure = wasm_bindgen::closure::Closure::<dyn Fn(_)>::new(handler);
             self.element
                 .add_event_listener_with_callback(event_type, closure.as_ref().unchecked_ref())
                 .unwrap();
@@ -92,7 +92,7 @@ pub fn main() -> Result<(), JsValue> {
     p.set_inner_html("Hello from Rust!");
     p.add_event_listener(
         "click",
-        clone!(p,input; || {
+        clone!(p,input; |_event | {
             p.set_inner_html(&input.get_value())
         }),
     );
