@@ -65,9 +65,10 @@ pub mod dom {
                 .value()
         }
 
-        pub fn add_event_listener<Handler>(&self, event_type: &str, handler: Handler)
+        pub fn add_event_listener<Handler, ClosureArg>(&self, event_type: &str, handler: Handler)
         where
-            Handler: Fn(web_sys::MouseEvent) + 'static,
+            Handler: Fn(ClosureArg) + 'static,
+            ClosureArg: wasm_bindgen::convert::FromWasmAbi + 'static,
         {
             let closure = wasm_bindgen::closure::Closure::<dyn Fn(_)>::new(handler);
             self.element
@@ -90,7 +91,7 @@ pub fn main() -> Result<(), JsValue> {
     let input = document.create_element("input");
 
     p.set_inner_html("Hello from Rust!");
-    p.add_event_listener(
+    p.add_event_listener::<_, web_sys::MouseEvent>(
         "click",
         clone!(p,input; |_event | {
             p.set_inner_html(&input.get_value())
