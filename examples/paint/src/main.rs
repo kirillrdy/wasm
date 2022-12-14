@@ -86,10 +86,10 @@ pub fn main() {
     let polygon = RefCell::new(polygon);
 
     let pressed = Rc::new(Cell::new(false));
-    svg.add_event_listener("mousedown", clone!(pressed ; |_event| { pressed.set(true);}));
-    svg.add_event_listener("mouseup", clone!(pressed ; |_event| { pressed.set(false);}));
+    svg.add_event_listener::<_, web_sys::MouseEvent>("mousedown", clone!(pressed ; |_event| { pressed.set(true);}));
+    svg.add_event_listener::<_, web_sys::MouseEvent>("mouseup", clone!(pressed ; |_event| { pressed.set(false);}));
 
-    svg.add_event_listener(
+    svg.add_event_listener::<_, web_sys::MouseEvent>(
         "mousemove",
         clone!( pressed;  |event| {
             if pressed.get() {
