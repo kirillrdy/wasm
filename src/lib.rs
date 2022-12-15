@@ -83,23 +83,3 @@ pub mod dom {
         pub element: web_sys::Element,
     }
 }
-
-pub fn main() -> Result<(), JsValue> {
-    let document = dom::document();
-
-    let p = document.create_element("p");
-    let input = document.create_element("input");
-
-    p.set_inner_html("Hello from Rust!");
-    p.add_event_listener::<_, web_sys::MouseEvent>(
-        "click",
-        clone!(p,input; |_event | {
-            p.set_inner_html(&input.get_value())
-        }),
-    );
-
-    let body = document.body();
-    body.append_child(&input);
-    body.append_child(&p);
-    Ok(())
-}
